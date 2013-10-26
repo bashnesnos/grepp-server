@@ -1,16 +1,26 @@
 package grepp.server
 
-import org.smltools.grepp.MongoOutput
-import groovy.util.logging.Slf4j;
+import org.springframework.web.servlet.ModelAndView
+import grails.web.JSONBuilder
 
-@Slf4j
 class HomeController {
 
 	def greppRunnerService
 	
     def index() {
 		//log.debug("Avavilable files {}", (Object) new File('.').list())
-		def requestId = greppRunnerService.runGrepp("app application.properties") 
-		render "Running $requestId"
+		try {
+			def reqId = greppRunnerService.runGrepp("app application.properties")
+			render(view: "/home/index", model: [requestId: reqId])
+			//render "blabla"
+		}
+		catch (FileNotFoundException ex) {
+			log.debug("Can't find requested file", ex)
+			render "File not found"
+		} 
+	}
+	
+	def renderLogs() {
+		render greppRunnerService.getResults(params.id)
 	}
 }
