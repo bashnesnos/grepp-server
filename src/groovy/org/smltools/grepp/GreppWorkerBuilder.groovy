@@ -13,10 +13,34 @@ public class GreppWorkerBuilder {
 	private String requestId
 	private ParamsHolder params
 	private WgrepOutput<?, ?> output
-	private static ParamsHolderFactory<?> paramsFactory
+	private ParamsHolderFactory<?> paramsFactory
+	private File workingDir
 	
-	public static void setFactory(ParamsHolderFactory<?> factory) {
+	public GreppWorkerBuilder(ParamsHolderFactory<?> paramsFactory) {
+		this(paramsFactory, null)
+	}
+
+	
+	public GreppWorkerBuilder(ParamsHolderFactory<?> paramsFactory, File workingDir) {
+		this.paramsFactory = paramsFactory
+		setWorkingDir(workingDir)
+	}
+	
+	public GreppWorkerBuilder setWorkingDir(File workingDir){
+		this.workingDir = workingDir
+		if (paramsFactory != null) {
+			log.debug("Limiting working dir to {}", workingDir.getAbsolutePath())
+			paramsFactory.setWorkingDir(workingDir)
+		}
+		return this
+	}
+	
+	public GreppWorkerBuilder setParamsFactory(ParamsHolderFactory<?> factory) {
 		this.paramsFactory = factory
+		if (workingDir != null) {
+			paramsFactory.setWorkingDir(workingDir)
+		}
+		return this
 	} 
 	
 	public GreppWorkerBuilder setParams(def args) {

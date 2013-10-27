@@ -4,26 +4,31 @@ import org.springframework.web.servlet.ModelAndView
 import grails.converters.JSON
 import grails.web.JSONBuilder
 
-class HomeController {
-
+class LogsController {
+	
+	static scope = "session"
+	
 	def greppRunnerService
 	
     def index() {
-		render(view: "/home/index")
+		render(view: "/logs/index")
 	}
 	
 	def start(){
 		try {
-			def reqId = greppRunnerService.runGrepp(params.request)
-			render reqId
+			render greppRunnerService.runGrepp(params.request) as JSON
 		}
 		catch (FileNotFoundException ex) {
 			log.debug("Can't find requested file", ex)
-			render "File not found"
+			render (["error": "File not found"]) as JSON
 		}
 	}
 	
-	def renderLogs() {
+	def getLogs() {
 		render greppRunnerService.getResults(params.id) as JSON
+	}
+	
+	def cancel() {
+		render greppRunnerService.cancelRequest(params.id)
 	}
 }

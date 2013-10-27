@@ -1,9 +1,10 @@
 class UrlMappings {
 
 	static mappings = {
-        "/home"(controller: "home")
-		"/home/renderLogs/$id?"(controller: "home", action: "renderLogs")
-		"/home/start"(controller: "home", action: "start")			
+        "/logs"(controller: "logs")
+		"/logs/getLogs/$id?"(controller: "logs", action: "getLogs")
+		"/logs/start"(controller: "logs", action: "start")
+		"/logs/cancel/$id?"(controller: "logs", action: "cancel")			
         "/"(view:"/index")
         "500"(view:'/error')
 	}
