@@ -1,6 +1,7 @@
 package grepp.server
 
 import org.springframework.web.servlet.ModelAndView
+import grails.converters.JSON
 import grails.web.JSONBuilder
 
 class HomeController {
@@ -8,19 +9,21 @@ class HomeController {
 	def greppRunnerService
 	
     def index() {
-		//log.debug("Avavilable files {}", (Object) new File('.').list())
+		render(view: "/home/index")
+	}
+	
+	def start(){
 		try {
-			def reqId = greppRunnerService.runGrepp("app application.properties")
-			render(view: "/home/index", model: [requestId: reqId])
-			//render "blabla"
+			def reqId = greppRunnerService.runGrepp(params.request)
+			render reqId
 		}
 		catch (FileNotFoundException ex) {
 			log.debug("Can't find requested file", ex)
 			render "File not found"
-		} 
+		}
 	}
 	
 	def renderLogs() {
-		render greppRunnerService.getResults(params.id)
+		render greppRunnerService.getResults(params.id) as JSON
 	}
 }

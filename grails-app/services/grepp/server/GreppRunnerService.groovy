@@ -48,6 +48,6 @@ class GreppRunnerService {
 			}
 			return currentBatch
 		}
-		return "No more entries"
+		return [["data":"No more entries"]]
 	}
 }

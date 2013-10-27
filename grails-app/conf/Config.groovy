@@ -108,12 +108,10 @@ log4j = {
 	trace 'org.smltools',
 		  'grepp.server'
 	
-    debug 'org.codehaus.groovy.grails.web.pages',          // GSP
+    error 'org.codehaus.groovy.grails.web.pages',          // GSP
 			'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
-			'org.codehaus.groovy.grails.web.mapping'        // URL mapping
-
-			  
-    error  'org.codehaus.groovy.grails.web.servlet',        // controllers
+			'org.codehaus.groovy.grails.web.mapping',        // URL mapping
+			'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.sitemesh',       // layouts
            'org.codehaus.groovy.grails.commons',            // core / classloading
            'org.codehaus.groovy.grails.plugins',            // plugins
