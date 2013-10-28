@@ -23,12 +23,12 @@
 				var unicode=e.keyCode? e.keyCode : e.charCode;
 				
 				if (evtobj.ctrlKey)	{
+				}
+				else {
 					if (unicode == 13) { //Enter was pressed
 						 findLogs(requestStr);
 					}
-				}
-				else {
-					if (unicode == 27) { //Escape was pressed
+					else if (unicode == 27) { //Escape was pressed
 						$('#commandLine').val('')
 					}
 				}

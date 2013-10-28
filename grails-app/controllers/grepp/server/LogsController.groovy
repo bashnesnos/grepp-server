@@ -7,11 +7,11 @@ import grails.web.JSONBuilder
 class LogsController {
 	
 	static scope = "session"
-	
+	def errors
 	def greppRunnerService
 	
     def index() {
-		render(view: "/logs/index")
+		return new ModelAndView("/logs/index")
 	}
 	
 	def start(){
