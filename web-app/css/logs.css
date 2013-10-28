@@ -6,6 +6,7 @@ html {
 	margin-left: auto;
 	margin-right: auto;
 	width: 80%;
+	height: 10%;
 	color: white;
 }
 
@@ -13,6 +14,10 @@ html {
 	color: white;
 	overflow-y: scroll;
 	height: 600px;
+    scrollbar-base-color: black;
+    scrollbar-highlight-color: black;
+    scrollbar-arrow-color: gold;
+    scrollbar-face-color: gold;
 }
 
 input {

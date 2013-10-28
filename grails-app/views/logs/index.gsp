@@ -13,8 +13,11 @@
   	  <div class="commandDiv">
 	  	<label for="commandLine">&gt;&gt; </label><input id="commandLine" type="text" autofocus onkeyup="submitOnCtrlEnter($(this).val(), event)"/>
 	  </div>
+	  <div class="alertsDiv">
+	  	<p id="alertsArea"></p>
+	  </div>
 	  <div class="logsDiv">
-	  	<p id="logArea">Enter your command to the line above</p>
+	  	<pre id="logArea">Enter your command to the line above</pre>
 	  </div>
 	  <g:javascript>
 		
@@ -89,7 +92,12 @@
 						} 
 						, "json"
 					);
-				}			
+				}
+				
+				$(document).ready(function() {
+					findLogs("ls");
+				});
+							
 		</g:javascript>
   </div>
   <r:layoutResources/>

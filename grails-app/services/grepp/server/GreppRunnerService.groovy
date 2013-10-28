@@ -34,13 +34,16 @@ class GreppRunnerService {
 			curDir = new File(".")
 		}
 		
-		["result":
+		def resultList = [".."]
+		resultList.addAll(
 			curDir.listFiles().sort {
 				(it.isDirectory() ? -1000 : 0) + it.getName().length()
 			}.collect {
 				it.getName() + (it.isDirectory() ? "/" : "")
 			}
-		]
+		)
+
+		["result": resultList]
 	}
 	
     def runGrepp(String params_) {
