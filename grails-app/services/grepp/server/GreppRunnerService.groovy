@@ -99,7 +99,7 @@ class GreppRunnerService {
 	
 	def getResults(String reqId) {
 		log.debug("Attempting to fetch logs for request {}", reqId)
-		if (reqId == null) return [["data":"Invalid requestId"]]
+		if (reqId == null) return [["error":"Invalid requestId"]]
 		def greppFuture = workers.get(reqId)
 		if (greppFuture != null) {
 			def cursor = LogEntry.collection.find(requestId: reqId)
@@ -112,6 +112,6 @@ class GreppRunnerService {
 			}
 			return currentBatch
 		}
-		return [["data":"No more entries"]]
+		return [["error":"No more entries"]]
 	}
 }

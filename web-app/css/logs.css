@@ -13,11 +13,16 @@ html {
 .logsDiv{
 	color: white;
 	overflow-y: scroll;
-	height: 600px;
+	height: 500px;
     scrollbar-base-color: black;
     scrollbar-highlight-color: black;
     scrollbar-arrow-color: gold;
     scrollbar-face-color: gold;
+}
+
+.alertsDiv{
+	font-style: italic;
+	color: gold;
 }
 
 input {

@@ -1,5 +1,5 @@
 onmessage = function(event) {
-	if (event.data.response == null || event.data.response.indexOf('No more entries') == -1) {
+	if (event.data.response == null || event.data.response.error == null) {
 		postMessage({requestId: event.data.requestId});
 	}
 	return;

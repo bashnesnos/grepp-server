@@ -42,20 +42,26 @@
 			
 			function updateArea(data) {
 	    		var logArea = $("#logArea");
-	    		var curHtml = logArea.html(); 
-	    		logArea.html((curHtml.indexOf('Nothing yet') == -1 ? curHtml : '') + (data.length < 2 ? "<br/>" : "") +	    		
+	    		var alertsArea = $('#alertsArea');
+	    		var curAlertHtml = alertsArea.html();
+	    		alertsArea.html((curAlertHtml.indexOf('Nothing yet') == -1 ? curAlertHtml : '') +	    		
+		    		$.map(data, function(entry, idx){
+		    			return entry.error
+		    		}).join("<br/>")
+		    	);
+		    		
+	    		logArea.html(logArea.html() + (data.length < 2 ? "<br/>" : "") +	    		
 		    		$.map(data, function(entry, idx){
 		    			return entry.data
 		    		}).join("<br/>")
 		    	);
 			}
 			
-			
 			function fetchAllLogs(requestId) {
 					var getLogs = $.get("getLogs/" + requestId
 						, function(logs) {
 							updateArea(logs);
-							logsFetcher.postMessage({response: logs.length > 0 ? logs[0].data : null, requestId: requestId});
+							logsFetcher.postMessage({response: logs.length > 0 ? logs[0] : null, requestId: requestId});
 						}
 						, "json" 
 					);
@@ -71,7 +77,8 @@
 			}
 			
 			function findLogs(requestString){
-					$('#logArea').html('Nothing yet<br/>');
+					$('#alertsArea').html('Nothing yet');
+					$('#logArea').html('');
 					if (curRequestId != null) {
 						$.get("cancel/" + curRequestId);
 					}
