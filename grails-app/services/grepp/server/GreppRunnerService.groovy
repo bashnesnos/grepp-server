@@ -103,9 +103,10 @@ class GreppRunnerService {
 		def greppFuture = workers.get(reqId)
 		if (greppFuture != null) {
 			def cursor = LogEntry.collection.find(requestId: reqId)
-			def currentBatch = cursor.toArray()
+			def currentBatch = cursor.toArray().collect {it as LogEntry}
+			currentBatch.sort {it.id}
 			cursor.close()
-			currentBatch.each {(it as LogEntry).delete(flush: true)}
+			currentBatch.each {it.delete(flush: true)}
 			if (greppFuture.isDone()) {
 				log.debug("Background task finished, removing key")
 				workers.remove(reqId)

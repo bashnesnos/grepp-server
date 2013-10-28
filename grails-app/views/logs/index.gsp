@@ -14,13 +14,12 @@
 	  	<label for="commandLine">&gt;&gt; </label><input id="commandLine" type="text" autofocus onkeyup="submitOnCtrlEnter($(this).val(), event)"/>
 	  </div>
 	  <div class="alertsDiv">
-	  	<p id="alertsArea"></p>
+	  	<p id="alertsArea" onclick="javascript:$(this).html('')"></p>
 	  </div>
 	  <div class="logsDiv">
-	  	<pre id="logArea">Enter your command to the line above</pre>
+	  	<pre id="logArea"></pre>
 	  </div>
 	  <g:javascript>
-		
 			function submitOnCtrlEnter(requestStr, e) { 
 				var evtobj=window.event? event : e;
 				var unicode=e.keyCode? e.keyCode : e.charCode;
@@ -103,6 +102,7 @@
 				
 				$(document).ready(function() {
 					findLogs("ls");
+					$('#alertsArea').html('Enter your command to the line above');
 				});
 							
 		</g:javascript>
