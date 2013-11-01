@@ -25,7 +25,7 @@ class GreppRunnerService {
 	
 	public GreppRunnerService() {
 		def configHolder = new ConfigHolder(GreppUtil.getResourcePathOrNull("config.xml"), GreppUtil.getResourcePathOrNull("config.xsd"))
-		paramsFactory = new PredictingParamsHolderFactory(configHolder)
+		paramsFactory = configHolder.getParamsHolderFactory()
 	}
 	
 	private def listFiles() {
