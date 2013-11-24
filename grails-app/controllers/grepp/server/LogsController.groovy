@@ -28,6 +28,10 @@ class LogsController {
 		render greppRunnerService.getResults(params.id) as JSON
 	}
 	
+	def getOptions(){
+		render greppRunnerService.getOptions() as JSON
+	}
+	
 	def cancel() {
 		render greppRunnerService.cancelRequest(params.id)
 	}

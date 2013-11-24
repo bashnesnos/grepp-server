@@ -2,11 +2,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-<r:require module="jquery"/>
+<r:require module="jquery-dev"/>
 <r:require module="application"/>
 <r:layoutResources/>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-<title>Main page</title>
+<title>Logs page</title>
 </head>
 <body>
   <div class="body">
@@ -20,89 +20,32 @@
 	  	<pre id="logArea"></pre>
 	  </div>
 	  <g:javascript>
-			function submitOnCtrlEnter(requestStr, e) { 
-				var evtobj=window.event? event : e;
-				var unicode=e.keyCode? e.keyCode : e.charCode;
-				
-				if (evtobj.ctrlKey)	{
-				}
-				else {
-					if (unicode == 13) { //Enter was pressed
-						 findLogs(requestStr);
-					}
-					else if (unicode == 27) { //Escape was pressed
-						$('#commandLine').val('')
-					}
-				}
-			}
-	  
-			var logsFetcher = new Worker("${createLinkTo(dir: 'js', file: 'logsFetcher.js')}");
-			var curRequestId;
-			
-			function updateArea(data) {
-	    		var logArea = $("#logArea");
-	    		var alertsArea = $('#alertsArea');
-	    		var curAlertHtml = alertsArea.html();
-	    		alertsArea.html((curAlertHtml.indexOf('Nothing yet') == -1 ? curAlertHtml : '') +	    		
-		    		$.map(data, function(entry, idx){
-		    			return entry.error
-		    		}).join("<br/>")
-		    	);
-		    		
-	    		logArea.html(logArea.html() + (data.length < 2 ? "<br/>" : "") +	    		
-		    		$.map(data, function(entry, idx){
-		    			return entry.data
-		    		}).join("<br/>")
-		    	);
-			}
-			
-			function fetchAllLogs(requestId) {
-					var getLogs = $.get("getLogs/" + requestId
-						, function(logs) {
-							updateArea(logs);
-							logsFetcher.postMessage({response: logs.length > 0 ? logs[0] : null, requestId: requestId});
-						}
-						, "json" 
-					);
-			}
-			
-			logsFetcher.onmessage = function(event) {
-				if (event.data.requestId != null) {
-					fetchAllLogs(event.data.requestId)
-				}
-				else {
-					curRequestId = null;
-				}			
-			}
-			
-			function findLogs(requestString){
-					$('#alertsArea').html('Nothing yet');
-					$('#logArea').html('');
-					if (curRequestId != null) {
-						$.get("cancel/" + curRequestId);
-					}
-					var startProcessing = $.get("start"
-						, {request: requestString}
-						, function(data) {
-							if (data.error != null) {
-								updateArea([{data: data.error}]);
-							}
-							else if (data.result != null) {
-								$('#commandLine').val('');
-								updateArea([{data: data.result}]);
-							}
-							else if (data.requestId != null) {
-								curRequestId = data.requestId;
-								logsFetcher.postMessage({requestId: curRequestId});
-							}
-						} 
-						, "json"
-					);
-				}
-				
+
 				$(document).ready(function() {
 					findLogs("ls");
-					$('#alertsArea').html('Enter your command to the line above');
+					$('#alertsArea').html('Enter your command to the line above. Type \'opt\' to view the options');
+					
+					$('#commandLine').autocomplete(
+					{
+						source: function(request, response) {
+									var getOptions = $.get("getOptions",
+										function(data) {
+											console.log(request);
+											var resultList = new Array();
+											withGreppOptions(data.options, function(curPrefix, flag, flagVal){
+												var fullOpt = curPrefix + flag;
+												console.log(fullOpt);
+												if (fullOpt.search(request.term) > -1) {
+													console.log("matched");
+													resultList.push({label: fullOpt + " : " + flagVal, value: fullOpt});
+												}
+											});
+											response(resultList);
+										}
+										, "json");
+								}
+					})
+					
 				});
 							
 		</g:javascript>

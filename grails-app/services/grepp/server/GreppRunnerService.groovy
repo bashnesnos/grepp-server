@@ -22,9 +22,10 @@ class GreppRunnerService {
 	File curDir = new File(".")
 	Pattern pathPattern = Pattern.compile(/ (.*)/) 
 	ParamsHolderFactory<?> paramsFactory
+	ConfigHolder configHolder
 	
 	public GreppRunnerService() {
-		def configHolder = new ConfigHolder(GreppUtil.getResourcePathOrNull("config.xml"), GreppUtil.getResourcePathOrNull("config.xsd"))
+		configHolder = new ConfigHolder(GreppUtil.getResourcePathOrNull("config.xml"), GreppUtil.getResourcePathOrNull("config.xsd"))
 		paramsFactory = configHolder.getParamsHolderFactory()
 	}
 	
@@ -44,6 +45,17 @@ class GreppRunnerService {
 		)
 
 		["result": resultList]
+	}
+	
+	def getOptions() {
+		def allOptions = [:]
+		allOptions[""] = [
+							"opt" : ["List available flags and commands"],
+							"cd" : ["Change current directory"],
+							"ls" : ["List current directory contents"]
+						 ]
+		allOptions.putAll(configHolder.getOptions())
+		return ["options": allOptions]
 	}
 	
     def runGrepp(String params_) {
@@ -69,6 +81,9 @@ class GreppRunnerService {
 					}
 				}
 				return listFiles()
+				break
+			case ~/opt/:
+				return getOptions()
 				break
 			default:
 				GreppWorkerBuilder workerBuilder = new GreppWorkerBuilder(paramsFactory, curDir)

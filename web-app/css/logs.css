@@ -26,6 +26,10 @@ html {
 	color: gold;
 }
 
+.ui-widget-content a{
+	color: gold;
+}
+
 input {
 	width: 90%;
 	background-color: black;
