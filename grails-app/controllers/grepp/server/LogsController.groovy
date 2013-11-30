@@ -11,7 +11,7 @@ class LogsController {
 	def greppRunnerService
 	
     def index() {
-		return new ModelAndView("/logs/index")
+		return new ModelAndView("/logs/index", ["legend":greppRunnerService.getLegend()])
 	}
 	
 	def start(){

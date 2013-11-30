@@ -57,6 +57,10 @@ public class GreppWorkerBuilder {
 		return this
 	}
 	
+	public ParamsHolder getParams() {
+		return this.params;
+	}
+	
 	public GreppWorkerBuilder setOutput(WgrepOutput<?,?> output) {
 		this.output = output
 		return this

@@ -47,6 +47,11 @@ class GreppRunnerService {
 		["result": resultList]
 	}
 	
+	def getLegend() {
+		//TODO: get legend from params factory
+		return '[-[:option:]] [--:filter_option:] [-L LOG_ENTRY_PATTERN] [FILTER_PATTERN] [--dtime FROM_DATE TO_DATE] [FILENAME [FILENAME]]'
+	}
+	
 	def getOptions() {
 		def allOptions = [:]
 		allOptions[""] = [
@@ -87,13 +92,15 @@ class GreppRunnerService {
 				break
 			default:
 				GreppWorkerBuilder workerBuilder = new GreppWorkerBuilder(paramsFactory, curDir)
-				workerBuilder.setParams(params_.split(' '))
+				def origParams = params_.split(' ')
+				workerBuilder.setParams(origParams)
 				GreppWorker worker = workerBuilder.buildWorker()
 				FutureTask<String> greppFuture = new FutureTask<String>(worker, "done");
 				String currentRequest = worker.getId()
 				workers.put(currentRequest, greppFuture)
 				greppFuture.run()
-				return ["requestId" : currentRequest]
+				def fileName = workerBuilder.getParams().getSpoolFileName()
+				return ["requestId" : currentRequest, "fileName": fileName.startsWith(".") ? origParams[origParams.length-1] : fileName]
 		}
 		
     }

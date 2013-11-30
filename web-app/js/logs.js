@@ -1,8 +1,11 @@
-function submitOnCtrlEnter(requestStr, e) {
+function cmdLineKeyUp(requestStr, e) {
 	var evtobj = window.event ? event : e;
 	var unicode = e.keyCode ? e.keyCode : e.charCode;
 
 	if (evtobj.ctrlKey) {
+		if (unicode == 32) { //Space was pressed
+			$('#commandLine').autocomplete( "search", "." );
+		}
 	} else {
 		if (unicode == 13) { // Enter was pressed
 			findLogs(requestStr);
@@ -12,9 +15,19 @@ function submitOnCtrlEnter(requestStr, e) {
 	}
 }
 
-var logsFetcher = new Worker(
-		"${createLinkTo(dir: 'js', file: 'logsFetcher.js')}");
+
+var logsFetcher = new Worker("${createLinkTo(dir: 'js', file: 'logsFetcher.js')}");
+logsFetcher.onmessage = function(event) {
+	console.log("Got event from fetcher " + event.data.requestId);
+	if (event.data.requestId != null) {
+		fetchAllLogs(event.data.requestId)
+	} else {
+		curRequestId = null;
+	}
+}
+
 var curRequestId;
+var curFileName;
 
 function updateArea(data) {
 	var logArea = $("#logArea");
@@ -35,19 +48,12 @@ function updateArea(data) {
 function fetchAllLogs(requestId) {
 	var getLogs = $.get("getLogs/" + requestId, function(logs) {
 		updateArea(logs);
+		console.log("Got logs for " + requestId);
 		logsFetcher.postMessage({
 			response : logs.length > 0 ? logs[0] : null,
 			requestId : requestId
 		});
 	}, "json");
-}
-
-logsFetcher.onmessage = function(event) {
-	if (event.data.requestId != null) {
-		fetchAllLogs(event.data.requestId)
-	} else {
-		curRequestId = null;
-	}
 }
 
 function withGreppOptions(options, callback) {
@@ -97,6 +103,8 @@ function findLogs(requestString) {
 			} ]);
 		} else if (data.requestId != null) {
 			curRequestId = data.requestId;
+			curFileName = data.fileName;
+			console.log("Got requestId");
 			logsFetcher.postMessage({
 				requestId : curRequestId
 			});
