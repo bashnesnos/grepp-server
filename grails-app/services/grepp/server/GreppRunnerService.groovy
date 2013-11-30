@@ -3,7 +3,7 @@ package grepp.server
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.FutureTask
 import java.util.regex.Pattern
-
+import javax.annotation.PostConstruct
 import org.smltools.grepp.GreppWorkerBuilder
 import org.smltools.grepp.GreppWorker
 import org.smltools.grepp.config.ConfigHolder
@@ -18,15 +18,23 @@ import groovy.util.logging.Slf4j
 class GreppRunnerService {
 	static scope = "session"
 	
+	def grailsApplication
+	
 	ConcurrentHashMap<String, FutureTask<String>> workers = new ConcurrentHashMap<String, FutureTask<String>>()	
-	File curDir = new File(".")
+	File curDir
 	Pattern pathPattern = Pattern.compile(/ (.*)/) 
 	ParamsHolderFactory<?> paramsFactory
 	ConfigHolder configHolder
 	
-	public GreppRunnerService() {
+	public GreppRunnerService() {	
 		configHolder = new ConfigHolder(GreppUtil.getResourcePathOrNull("config.xml"), GreppUtil.getResourcePathOrNull("config.xsd"))
 		paramsFactory = configHolder.getParamsHolderFactory()
+	}
+	
+	@PostConstruct
+	public void init(){
+		curDir = new File(grailsApplication.getFlatConfig()["logsDir"])
+		log.debug("Initial directory set to ${curDir}")
 	}
 	
 	private def listFiles() {
@@ -37,11 +45,12 @@ class GreppRunnerService {
 		
 		def resultList = [".."]
 		resultList.addAll(
-			curDir.listFiles().sort {
+			curDir.listFiles() != null ? curDir.listFiles().sort {
 				(it.isDirectory() ? -1000 : 0) + it.getName().length()
 			}.collect {
 				it.getName() + (it.isDirectory() ? "/" : "")
 			}
+			: []
 		)
 
 		["result": resultList]

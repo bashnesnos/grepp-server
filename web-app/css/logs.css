@@ -21,18 +21,32 @@ html {
     scrollbar-face-color: gold;
 }
 
-.alertsDiv{
+.alertsDiv {
 	font-style: italic;
 	color: gold;
 }
 
-.ui-widget-content a{
+.alertsArea {
+	margin-left: 50px;
+}
+
+.ui-widget {
+	font-size: 0.8em;
+}
+
+.ui-button, .ui-widget-content a {
 	color: gold;
 }
 
-input {
+.ui-tooltip {
+ 	max-width: 780px;
+ 	font-size: small;
+}
+
+input, .commandTooltip  {
 	width: 90%;
 	background-color: black;
 	color:gold;
 	border: 0px;
 }
+
