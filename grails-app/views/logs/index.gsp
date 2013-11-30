@@ -179,7 +179,7 @@
 								
 								if (lastCommand.search(/^(?:(?:ls)|(?:cd))/) > -1) {
 									$.each($('#logArea').html().split('<br>'), function(idx, fileName) {
-										if (fileName != '' && fileName.search(lastBit) > -1) {
+										if (fileName != '' && fileName != '..' && fileName.search(lastBit) > -1) {
 											resultList.push({label: "file: " + fileName, value: conservedBit + fileName});
 										}
 									});

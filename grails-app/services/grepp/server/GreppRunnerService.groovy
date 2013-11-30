@@ -33,11 +33,13 @@ class GreppRunnerService {
 	
 	@PostConstruct
 	public void init(){
-		curDir = new File(grailsApplication.getFlatConfig()["logsDir"])
+		def logsPath = GreppUtil.getResourcePathOrNull(grailsApplication.getFlatConfig()["logsDir"])
+		curDir = new File(logsPath != null ? logsPath : ".")
 		log.debug("Initial directory set to ${curDir}")
 	}
 	
 	private def listFiles() {
+		
 		if (curDir == null) {
 			log.debug("curDir was nulled somehow")
 			curDir = new File(".")
