@@ -1,12 +1,11 @@
 class UrlMappings {
 
 	static mappings = {
-        "/logs"(controller: "logs")
-		"/logs/getLogs/$id?"(controller: "logs", action: "getLogs")
-		"/logs/start"(controller: "logs", action: "start")
-		"/logs/getOptions"(controller: "logs", action: "getOptions")
-		"/logs/cancel/$id?"(controller: "logs", action: "cancel")			
-        "/"(view:"/index")
+        "/"(controller: "logs")
+		"/getLogs/$id?"(controller: "logs", action: "getLogs")
+		"/start"(controller: "logs", action: "start")
+		"/getOptions"(controller: "logs", action: "getOptions")
+		"/cancel/$id?"(controller: "logs", action: "cancel")			
         "500"(view:'/error')
 	}
 }

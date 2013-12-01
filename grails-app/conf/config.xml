@@ -56,5 +56,11 @@
 			<starter>log4j.logger</starter>
 			<pattern>.*\.properties</pattern>
 		</config>
+		<config id="serverLog">
+			<date_format>yyyy-MM-dd HH:mm:ss</date_format>
+			<date>(\d{4}-\d{1,2}-\d{1,2} \d{2}:\d{2}:\d{2})</date>
+			<pattern>server</pattern>
+		</config>
+		
 	</custom>
 </root>

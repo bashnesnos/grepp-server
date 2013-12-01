@@ -103,9 +103,11 @@ log4j = {
 //    appenders {
 //        file name:'appLog', layout:pattern(conversionPattern: '%c{2} %m%n')
 //    }
+	appenders {
+		file name:'greppTrace', file:'logs/grepp-server.log'
+	}
 	
-
-	trace 'org.smltools'
+	trace greppTrace:'org.smltools'
 	debug 'grepp.server'
 	error	  'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
 		  'org.codehaus.groovy.grails.web.mapping',        // URL mapping

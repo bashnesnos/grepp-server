@@ -162,6 +162,7 @@ class GreppRunnerService {
 				return getOptions()
 				break
 			default:
+				paramsFactory = configHolder.getParamsHolderFactory()
 				GreppWorkerBuilder workerBuilder = new GreppWorkerBuilder(paramsFactory, curDir)
 				def origParams = params_.split(' ')
 				workerBuilder.setParams(origParams)
