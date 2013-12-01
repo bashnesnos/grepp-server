@@ -36,6 +36,10 @@
 			var curFileName;
 			var lastCommand;
 						
+			function placeAlert(alertHtml) {
+				$('#alertsArea').html(alertHtml);
+			}						
+						
 			function cmdLineKeyUp(requestStr, e) {
 				var evtobj = window.event ? event : e;
 				var unicode = e.keyCode ? e.keyCode : e.charCode;
@@ -103,7 +107,8 @@
 			}
 			
 			function findLogs(requestString) {
-				$('#alertsArea').html('Nothing yet');
+				placeAlert('Nothing yet');
+
 				$('#logArea').html('');
 				if (curRequestId != null) {
 					$.get("cancel/" + curRequestId);
@@ -114,10 +119,10 @@
 				}, function(data) {
 					if (data.error != null) {
 						curFileName = 'error.txt';
-						updateArea([ {
-							data : data.error
-						} ]);
-					} else if (data.result != null) {
+						placeAlert(data.error);
+					}
+					
+					if (data.result != null) {
 						$('#commandLine').val('');
 						curFileName = requestString + '_results.txt';
 						updateArea([ {
