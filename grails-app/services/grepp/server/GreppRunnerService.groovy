@@ -27,6 +27,7 @@ class GreppRunnerService {
 	Pattern pathPattern = Pattern.compile(/ (.*)/) 
 	ParamsHolderFactory<?> paramsFactory
 	ConfigHolder configHolder
+	def separator = System.getProperty("file.separator")
 	
 	public GreppRunnerService() {	
 		configHolder = new ConfigHolder(GreppUtil.getResourcePathOrNull("config.xml"), GreppUtil.getResourcePathOrNull("config.xsd"))
@@ -133,7 +134,7 @@ class GreppRunnerService {
 							curDir = new File(path)	
 						}
 						else {
-							curDir = new File("${curDir.getAbsolutePath()}\\$path")
+							curDir = new File("${curDir.getAbsolutePath()}$separator$path")
 						}
 						if (curDir.isFile()) {
 							log.debug("Can't cd into file")
